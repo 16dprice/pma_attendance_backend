@@ -9,8 +9,13 @@ const RoadieSignUpModel = require('./models/roadie-signup.model');
 
 require('dotenv').config();
 
+let databaseName = 'pma_attedance';
+if(process.env.NODE_ENV === 'development') {
+    databaseName = 'pma_dev';
+}
+
 const connection = new Sequelize(
-    process.env.MYSQL_DATABASE,
+    databaseName,
     process.env.MYSQL_USER,
     process.env.MYSQL_PASS,
     {
@@ -28,7 +33,7 @@ const RoadieSignUp = RoadieSignUpModel(connection, Sequelize);
 
 
 Attendance.belongsTo(Event, { onDelete: 'cascade' }); // adds eventUuid reference to events table
-Attendance.belongsTo(Member); // adds memberMemberNumber reference to members table
+Attendance.belongsTo(Member); // adds memberMemberNumber reference to attendance table
 
 RoadieSignUp.belongsTo(Member, { onDelete: 'cascade' }); // adds memberMemberNumber reference to roadie sign up table
 RoadieSignUp.belongsTo(Roadies, { onDelete: 'cascade' }); // adds roadyUuid reference to roadie sign up table

@@ -44,9 +44,13 @@ app.listen(unsecurePort, () => {
     console.log(`Server is running on port ${unsecurePort}...`);
 });
 
-const options = {
-    key: fs.readFileSync("/etc/letsencrypt/live/pmaiotamuattendance.neat-url.com/privkey.pem"),
-    cert: fs.readFileSync("/etc/letsencrypt/live/pmaiotamuattendance.neat-url.com/fullchain.pem")
-};
+if(process.env.NODE_ENV === 'development') {
+    https.createServer({}, app).listen(securePort);
+} else {
+    const options = {
+        key: fs.readFileSync("/etc/letsencrypt/live/pmaiotamuattendance.neat-url.com/privkey.pem"),
+        cert: fs.readFileSync("/etc/letsencrypt/live/pmaiotamuattendance.neat-url.com/fullchain.pem")
+    };
 
-https.createServer(options, app).listen(securePort);
+    https.createServer(options, app).listen(securePort);
+}
