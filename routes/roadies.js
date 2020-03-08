@@ -25,7 +25,25 @@ router.route('/add').post((req, res) => {
     const members_needed = req.body.members_needed;
 
     Roadies.create({ date, call_time, location, members_needed })
-        .then(event => res.json(event))
+        .then(roadie => res.json(roadie))
+        .catch(err => res.json(err));
+
+});
+
+// update
+router.route('/update/').post((req, res) => {
+
+    const uuid = req.body.uuid;
+    const date = req.body.date;
+    const call_time = req.body.call_time;
+    const location = req.body.location;
+    const members_needed = req.body.members_needed;
+
+    Roadies.update(
+        { date, call_time, location, members_needed },
+        { where: { uuid } }
+        )
+        .then(roadie => res.json(roadie))
         .catch(err => res.json(err));
 
 });
